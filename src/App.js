@@ -10,8 +10,13 @@ function App() {
     const [filteredTodos, setFilteredToDos] = useState([]);
 
     useEffect(() => {
+        getLocalTodos();
+    }, []);
+
+    useEffect(() => {
         console.log("App just mounted/ new To Dos");
         filterHandler();
+        saveLocalTodos();
     }, [toDos, status]);
 
     const filterHandler = () => {
@@ -29,6 +34,16 @@ function App() {
             default:
                 setFilteredToDos(toDos);
                 break;
+        }
+    };
+    const saveLocalTodos = () =>
+        localStorage.setItem("toDos", JSON.stringify(toDos));
+    const getLocalTodos = () => {
+        if (localStorage.getItem("toDos") === null) {
+            localStorage.setItem("toDos", JSON.stringify([]));
+        } else {
+            let todoLocal = JSON.parse(localStorage.getItem("toDos"));
+            setToDos(todoLocal);
         }
     };
     return (
